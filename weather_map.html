@@ -12,7 +12,7 @@
 	<style>
         #map {
             /* the width and height may be set to any size */
-            width: 80%;
+            width: 100%;
             height: 500px;
 			margin: auto;
         }
@@ -20,10 +20,32 @@
 </head>
 <body>
 
-<h1>My First Mapbox Map!</h1>
+<nav class="navbar navbar-light bg-light">
+	<div class="container-fluid">
+		<a class="navbar-brand">Weather.com</a>
+		<form class="d-flex w-60">
+			<input id="search-input" type="text" class="form-control w-100 me-2" placeholder="Enter an Address">
+			<button class="btn btn-outline-primary" onclick="doSearch(event)" id="search-btn">Search</button>
+		</form>
+	</div>
+</nav>
 
 <!-- The HTML element that serves as the Mapbox container -->
-<div id='map'></div>
+<div class="container">
+	<div id='map'></div>
+	<div class="d-flex">
+		<div class="d-flex">
+			<button id="zoom-5" onclick="changeZoom(5)" type="button" class="btn btn-outline-dark">5</button>
+			<button id="zoom-15" onclick="changeZoom(15)" type="button" class="btn btn-outline-dark">15</button>
+			<button id="zoom-20" onclick="changeZoom(20)" type="button" class="btn btn-outline-dark">20</button>
+		</div>
+		<div class="d-flex w-100 justify-content-end">
+			<button id="hide-btn" class="btn btn-outline-dark">Hide Pins</button>
+			<button id="unhide-btn" class="btn btn-outline-dark disabled">Unhide Pins</button>
+		</div>
+	</div>
+</div>
+
 
 <!-- Mapbox JS -->
 <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js"></script>
@@ -52,6 +74,66 @@
         center: [-98.4916, 29.4252]
     });
 
+    let markers = [];
+
+    function changeZoom(zoom) {
+        map.setZoom(zoom);
+    }
+
+    function doSearch(event) {
+        event.preventDefault();
+        let input = $("#search-input")[0].value;
+        pinThatAddress(input);
+        $("#search-input")[0].value = "";
+    }
+
+    function pinThatAddress(address) {
+        geocode(address, accessToken)
+            .then(function (result) {
+                const marker = new mapboxgl.Marker({"color": "red"});
+                marker.setLngLat(result);
+                marker.addTo(map);
+                map.setCenter(result);
+                markers.push(marker);
+
+                createPopUp(marker, address);
+            }).catch((function (error) {
+            console.log("Not a place");
+        }));
+    }
+
+    function createPopUp(marker, address) {
+        const popUp = new mapboxgl.Popup();
+        popUp.setHTML(
+            '<h3>' + address + '</h3>' +
+			'<div class="card"></div>' +
+			'<div class="card-body"></div>' +
+			'<h5>Forecast</h5>' +
+			'<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>' +
+			'<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card\'s content.</p>' +
+			'</div></div>'
+		);
+        marker.setPopup(popUp);
+    }
+
+
+    $("#hide-btn").click(function() {
+        markers.forEach((marker) => {
+            marker.remove();
+        });
+        $("#hide-btn").toggleClass("disabled");
+        $("#unhide-btn").toggleClass("disabled");
+    });
+
+    $("#unhide-btn").click(function() {
+        markers.forEach((marker) => {
+            marker.addTo(map);
+        });
+        $("#unhide-btn").toggleClass("disabled");
+        $("#hide-btn").toggleClass("disabled");
+    });
+
+
     $.get("http://api.openweathermap.org/data/2.5/weather", {
         APPID: OPENWEATHER_API_KEY,
         lat:    29.423017,
@@ -61,16 +143,7 @@
         console.log('current weather', data);
     });
 
-    $.get("http://api.openweathermap.org/data/2.5/onecall", {
-        APPID: OPENWEATHER_API_KEY,
-        lat:    29.423017,
-        lon:   -98.48527,
-        units: "imperial"
-    }).done(function(data) {
-        console.log('The entire response:', data);
-        console.log('Diving in - here is current information: ', data.current);
-        console.log('A step further - information for tomorrow: ', data.daily[1]);
-    });
+
 
 
 </script>
