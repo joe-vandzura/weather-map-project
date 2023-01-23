@@ -32,8 +32,8 @@
 </nav>
 
 <!-- The HTML element that serves as the Mapbox container -->
-<div class="container">
-	<div id='map'></div>
+<div class="container mb-3">
+	<div id='map' class="mt-3"></div>
 	<div class="d-flex">
 		<div class="d-flex">
 			<button id="zoom-5" onclick="changeZoom(5)" type="button" class="btn btn-outline-dark">5</button>
@@ -48,72 +48,8 @@
 </div>
 
 <!--  Weekly Forecast Cards-->
-<div class="cotainer mx-2 weekly-forecast">
+<div class="container weekly-forecast border">
 
-	<div class="card d-none weather-cards">
-		<img src="..." class="card-img-top" alt="...">
-		<div class="card-body">
-			<h5 class="card-title">Card title</h5>
-			<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-		</div>
-		<ul class="list-group list-group-flush">
-			<li class="list-group-item">An item</li>
-			<li class="list-group-item">A second item</li>
-			<li class="list-group-item">A third item</li>
-		</ul>
-	</div>
-
-	<div class="card d-none weather-cards">
-		<img src="..." class="card-img-top" alt="...">
-		<div class="card-body">
-			<h5 class="card-title">Card title</h5>
-			<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-		</div>
-		<ul class="list-group list-group-flush">
-			<li class="list-group-item">An item</li>
-			<li class="list-group-item">A second item</li>
-			<li class="list-group-item">A third item</li>
-		</ul>
-	</div>
-
-	<div class="card d-none weather-cards">
-		<img src="..." class="card-img-top" alt="...">
-		<div class="card-body">
-			<h5 class="card-title">Card title</h5>
-			<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-		</div>
-		<ul class="list-group list-group-flush">
-			<li class="list-group-item">An item</li>
-			<li class="list-group-item">A second item</li>
-			<li class="list-group-item">A third item</li>
-		</ul>
-	</div>
-
-	<div class="card d-none weather-cards"">
-		<img src="..." class="card-img-top" alt="...">
-		<div class="card-body">
-			<h5 class="card-title">Card title</h5>
-			<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-		</div>
-		<ul class="list-group list-group-flush">
-			<li class="list-group-item">An item</li>
-			<li class="list-group-item">A second item</li>
-			<li class="list-group-item">A third item</li>
-		</ul>
-	</div>
-
-	<div class="card d-none weather-cards">
-		<img src="..." class="card-img-top" alt="...">
-		<div class="card-body">
-			<h5 class="card-title">Card title</h5>
-			<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-		</div>
-		<ul class="list-group list-group-flush">
-			<li class="list-group-item">An item</li>
-			<li class="list-group-item">A second item</li>
-			<li class="list-group-item">A third item</li>
-		</ul>
-	</div>
 
 </div>
 
@@ -176,30 +112,30 @@
     }
 
     function createPopUp(marker, address, data) {
-        weeklyForecast();
         console.log(data);
         const popUp = new mapboxgl.Popup();
         popUp.setHTML(
             '<h3 class="text-capitalize mt-0 text-center">' + address + '</h3>' +
 			'<div class="card"></div>' +
 			'<div class="card-body m-0 p-0">' +
-			'<h5>'+ Math.round(data.main.temp) + '°F</h5>' +
-			'<h6 class="card-subtitle mb-2 text-muted">' + data.weather[0].description + '</h6>' +
-			'<p class="card-text m-0">H: ' + Math.round(data.main.temp_max) + '°F</p>' +
-            '<p class="card-text m-0">L:  ' + Math.round(data.main.temp_min) + '°F</p>' +
+			'<h5>'+ Math.round(data.list[0].main.temp) + '°F</h5>' +
+			'<h6 class="card-subtitle mb-2 text-muted">' + data.list[0].weather[0].description + '</h6>' +
+			'<p class="card-text m-0">H: ' + Math.round(data.list[0].main.temp_max) + '°F</p>' +
+            '<p class="card-text m-0">L:  ' + Math.round(data.list[0].main.temp_min) + '°F</p>' +
 			'</div></div>'
 		);
         marker.setPopup(popUp);
     }
 
     function getWeatherData(marker, address, result) {
-        $.get("http://api.openweathermap.org/data/2.5/weather", {
-            APPID: OPENWEATHER_API_KEY,
+        $.get("http://api.openweathermap.org/data/2.5/forecast", {
+            APPID: NEW_OPENWEATHER_API_KEY,
             lat:    result[1],
             lon:   result[0],
             units: "imperial"
         }).done(function(data) {
             createPopUp(marker, address, data);
+            weeklyForecast(marker, address, data);
         });
 	}
 
@@ -220,13 +156,50 @@
         $("#hide-btn").toggleClass("disabled");
     });
 
-    function weeklyForecast() {
-
-
-        $(".weather-cards").toggleClass("d-none");
+    function weeklyForecast(marker, address, data) {
+        let index = 0;
+        let dayIndex = 1;
+        $(".weekly-forecast").html("");
+        for (let i = 0; i < 5; i++) {
+            $(".weekly-forecast").append(
+                '<div class="card weather-cards">' +
+				'<img height="175px" src="http://openweathermap.org/img/w/' + getWeatherIcon(data, index) + '.png" class="card-img-top">' +
+				'<div class="card-body">' +
+				'<h5 class="card-title"> Day ' + dayIndex + '</h5>' +
+				'<p class="card-text">' + Math.round(data.list[index].main.temp) + '°F</p></div>' +
+				'<ul>' +
+				'<li class="list-group-item">Humidity: ' + Math.round(data.list[index].main.humidity) + '</li>' +
+				'<li class="list-group-item">Wind: ' + (data.list[index].wind.speed).toFixed(1) + '</li>' +
+                '<li class="list-group-item">Pressure: ' + Math.round(data.list[index].main.pressure) + '</li>' +
+				'</ul></div>'
+			);
+            dayIndex++;
+            index += 8;
+		}
 	}
 
 
+	function getWeatherIcon(data, index) {
+        if (data.list[index].weather[0].description === "clear sky") {
+            return "01d";
+		} else if (data.list[index].weather[0].description === "few clouds") {
+            return "02d";
+		} else if (data.list[index].weather[0].description === "scattered clouds") {
+			return "03d";
+		} else if (data.list[index].weather[0].description === "broken clouds") {
+			return "04d";
+		} else if (data.list[index].weather[0].description === "shower rain") {
+			return "09d";
+		} else if (data.list[index].weather[0].description === "rain" || data.list[index].weather[0].description === "light rain") {
+			return "10d";
+		} else if (data.list[index].weather[0].description === "thunderstorm") {
+			return "11d";
+		} else if (data.list[index].weather[0].description === "snow") {
+			return "13d";
+		} else if (data.list[index].weather[0].description === "mist") {
+			return "50d";
+		}
+	}
 
 </script>
 </body>
