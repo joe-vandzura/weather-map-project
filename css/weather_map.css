@@ -1,0 +1,7 @@
+.weekly-forecast {
+    display: flex;
+}
+
+.weather-cards {
+    margin: 10px;
+}
