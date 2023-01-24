@@ -1,13 +1,32 @@
+body {
+    background-image: linear-gradient(lightyellow, yellow);
+}
+
+#map-box {
+    background-color: #22b8ff;
+    width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+nav {
+    background-color: #22b8ff;
+}
+
+.navbar-brand {
+    color: yellow;
+}
+
 #search-stuff {
-    min-width: 50%;
+    min-width: 30%;
 }
 
 #search-input {
-    width: 60%;
+
 }
 
 #search-btn {
-    width: 30%;
+
 }
 
 .weekly-forecast {
@@ -16,4 +35,12 @@
 
 .weather-cards {
     margin: 5px;
+    color: yellow;
+    background-color: #22b8ff;
+}
+
+#weather-lists li {
+    color: black;
+    background-color: #99faff;
+    border: solid 2px yellow;
 }
