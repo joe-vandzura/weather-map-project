@@ -7,6 +7,7 @@ var map = new mapboxgl.Map({
 });
 
 let markers = [];
+let listOfPlaces = [];
 const defaultThing = $("#default-card").clone();
 
 
@@ -33,6 +34,7 @@ $("#modal-close-btn").click(() => {
 function doSearch(event) {
     event.preventDefault();
     let input = $("#search-input")[0].value;
+    listOfPlaces.unshift(input);
     pinThatAddress(input);
     $("#search-input")[0].value = "";
 }
@@ -40,7 +42,6 @@ function doSearch(event) {
 function pinThatAddress(address) {
     geocode(address, accessToken)
         .then(function (result) {
-
             const marker = new mapboxgl.Marker({"color": "blue"});
             marker.setLngLat(result);
             marker.addTo(map);
@@ -115,16 +116,23 @@ function resetDataCard() {
 }
 
 function addClearSearchButton() {
-    $("#restore-div").append('<div id="restore-btn-div" class="d-flex justify-content-center"><button id="restore-default-btn" class="btn btn-primary mt-3 border border-warning border-3">Clear Search</button></div>');
+    $("#restore-div").append(
+        '<div id="restore-btn-div" class="d-flex justify-content-between w-50">' +
+        '<button id="previous-btn" class="btn btn-primary mt-3 border border-warning border-3">Previous</button>' +
+        '<button id="restore-default-btn" class="btn btn-primary mt-3 border border-warning border-3">Clear Search</button>' +
+        '<button id="next-btn" class="btn btn-primary mt-3 border border-warning border-3">Next</button>' +
+        '</div>');
 
-    $("#restore-default-btn").click(function () {
-        map = new mapboxgl.Map({
-            container: 'map', style: 'mapbox://styles/mapbox/outdoors-v12', zoom: 1, center: [-98.4916, 29.4252]
-        });
-        $(".weather-cards").remove();
-        $("#weekly-forecast").append(defaultThing);
-        $("#restore-btn-div").remove();
+    $("#restore-default-btn").click(restoreDefault);
+}
+
+function restoreDefault() {
+    map = new mapboxgl.Map({
+        container: 'map', style: 'mapbox://styles/mapbox/outdoors-v12', zoom: 1, center: [-98.4916, 29.4252]
     });
+    $(".weather-cards").remove();
+    $("#weekly-forecast").append(defaultThing);
+    $("#restore-btn-div").remove();
 }
 
 $(document).ready(function(){
