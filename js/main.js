@@ -8,8 +8,20 @@ var map = new mapboxgl.Map({
 
 let markers = [];
 
+function increaseZoom() {
+    let currentzoom = map.getZoom();
+    currentzoom += 1;
+    map.setZoom(currentzoom);
+}
+
 function changeZoom(zoom) {
     map.setZoom(zoom);
+}
+
+function decreaseZoom() {
+    let currentzoom = map.getZoom();
+    currentzoom -= 1;
+    map.setZoom(currentzoom);
 }
 
 function doSearch(event) {
@@ -23,7 +35,7 @@ function pinThatAddress(address) {
     var date1 = new Date(0);
     geocode(address, accessToken)
         .then(function (result) {
-            const marker = new mapboxgl.Marker({"color": "red"});
+            const marker = new mapboxgl.Marker({"color": "blue"});
             marker.setLngLat(result);
             marker.addTo(map);
             map.setCenter(result);
@@ -72,10 +84,16 @@ $("#unhide-btn").click(function () {
     $("#hide-btn").toggleClass("disabled");
 });
 
+const defaultThing = $("#weekly-forecast").clone();
+
 function weeklyForecast(marker, address, data) {
-    let defaultThing = $("#default-card").clone();
+    console.log("DOING SEARCH HERE!!!");
+    console.log($(".weather-cards"));
+    $("#restore-div").html("");
+    $(".weather-cards").remove();
+    $("#weekly-forecast").html("");
     let index = 0;
-    $(".weekly-forecast").html("");
+    let html = "";
     for (let i = 0; i < 5; i++) {
         var date = new Date(data.list[index].dt_txt);
         if (i === 0) {
@@ -83,16 +101,19 @@ function weeklyForecast(marker, address, data) {
         } else {
             date = date.toDateString().substring(0, 3);
         }
-        $(".weekly-forecast").append('<div class="card w-100 weather-cards">' + '<div class="d-flex flex-column justify-content-center card-body">' + '<div class="d-flex ">' + '<h5 class="card-title">' + date + '</h5>' + '<div>' + '<img src="http://openweathermap.org/img/wn/' + data.list[index].weather[0].icon + '@2x.png" class="card-img-top">' + '</div>' + '<p class="card-text text-center">' + Math.round(data.list[index].main.temp) + '°F</p>' + '</div>' + '</div>' + '<ul id="weather-lists" class="m-0 px-5 pt-2 pb-4">' + '<li class="list-group-item">Humidity: ' + Math.round(data.list[index].main.humidity) + '</li>' + '<li class="list-group-item">Wind: ' + (data.list[index].wind.speed).toFixed(1) + '</li>' + '<li class="list-group-item">Pressure: ' + Math.round(data.list[index].main.pressure) + '</li>' + '</ul>' + '</div>'
+        html = $("#weekly-forecast").append('<div class="card w-100 weather-cards">' + '<div class="d-flex flex-column justify-content-center card-body">' + '<div class="d-flex ">' + '<h5 class="card-title">' + date + '</h5>' + '<div>' + '<img src="http://openweathermap.org/img/wn/' + data.list[index].weather[0].icon + '@2x.png" class="card-img-top">' + '</div>' + '<p class="card-text text-center">' + Math.round(data.list[index].main.temp) + '°F</p>' + '</div>' + '</div>' + '<ul id="weather-lists" class="m-0 px-5 pt-2 pb-4">' + '<li class="list-group-item">Humidity: ' + Math.round(data.list[index].main.humidity) + '</li>' + '<li class="list-group-item">Wind: ' + (data.list[index].wind.speed).toFixed(1) + '</li>' + '<li class="list-group-item">Pressure: ' + Math.round(data.list[index].main.pressure) + '</li>' + '</ul>' + '</div>'
         );
         index += 8;
     }
+    $("#weekly-forecast").replaceWith(html);
 
-    $("#restore-div").append('<div class="d-flex justify-content-center"><button id="restore-default-btn" class="btn btn-primary mt-3 border border-warning border-3">Clear Search</button></div>');
+    $("#restore-div").append('<div id="restore-btn-div" class="d-flex justify-content-center"><button id="restore-default-btn" class="btn btn-primary mt-3 border border-warning border-3">Clear Search</button></div>');
 
-    $("#restore-default-btn").click(function() {
-        $(".weekly-forecast").html("");
-        $("#default-card").html("");
-        $("#restore-div").html(defaultThing);
+    $("#restore-default-btn").click(function () {
+        console.log("PRESSING BUTTON HERE!!!");
+        console.log($(".weather-cards"));
+        $(".weather-cards").remove();
+        $("#weekly-forecast").replaceWith(defaultThing);
+        $("#restore-btn-div").remove();
     });
 }

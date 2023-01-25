@@ -5,16 +5,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Weather Map Project</title>
 	<!-- Mapbox CSS -->
-	<link href='https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css' rel='stylesheet' />
+	<link href='https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css' rel='stylesheet'/>
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<!-- Custom CSS -->
 	<style>
         #map {
             /* the width and height may be set to any size */
             width: 100%;
             height: 500px;
-			margin: auto;
+            margin: auto;
         }
 	</style>
 	<link rel="stylesheet" href="css/weather_map.css">
@@ -25,7 +26,8 @@
 	<div class="container-fluid">
 		<a class="navbar-brand"><strong><i>weather</i></strong>.com</a>
 		<form id="search-stuff" class="d-flex">
-			<input id="search-input" type="text" class="form-control me-2 d-none d-md-block" placeholder="Enter an Address">
+			<input id="search-input" type="text" class="form-control me-2 d-none d-md-block"
+				   placeholder="Enter an Address">
 			<button class="btn btn-warning d-none d-md-block" onclick="doSearch(event)" id="search-btn">Search</button>
 		</form>
 	</div>
@@ -36,33 +38,49 @@
 	<div id='map' class="border border-warning border-5"></div>
 	<div class="d-flex">
 		<div class="d-flex">
-			<button id="zoom-5" onclick="changeZoom(5)" type="button" class="btn btn-primary me-1 border border-warning border-3 border-top-0">5</button>
-			<button id="zoom-15" onclick="changeZoom(15)" type="button" class="btn btn-primary me-1 border border-warning border-3 border-top-0">15</button>
-			<button id="zoom-20" onclick="changeZoom(20)" type="button" class="btn btn-primary border border-warning border-3 border-top-0">20</button>
+			<button onclick="decreaseZoom()" type="button"
+					class="btn btn-primary me-1 border border-warning border-3 border-top-0">-
+			</button>
+			<button onclick="changeZoom(5)" type="button"
+					class="btn btn-primary me-1 border border-warning border-3 border-top-0">5
+			</button>
+			<button onclick="changeZoom(15)" type="button"
+					class="btn btn-primary me-1 border border-warning border-3 border-top-0">15
+			</button>
+			<button onclick="changeZoom(20)" type="button"
+					class="btn btn-primary me-1 border border-warning border-3 border-top-0">20
+			</button>
+			<button onclick="increaseZoom()" type="button"
+					class="btn btn-primary me-1 border border-warning border-3 border-top-0">+
+			</button>
 		</div>
 		<div class="d-flex w-100 justify-content-end">
-			<button id="hide-btn" class="btn btn-primary me-1 border border-warning border-3 border-top-0">Hide Pins</button>
-			<button id="unhide-btn" class="btn btn-primary ms-1 disabled border border-warning border-3 border-top-0">Unhide Pins</button>
+			<button id="hide-btn" class="btn btn-primary me-1 border border-warning border-3 border-top-0">Hide Pins
+			</button>
+			<button id="unhide-btn" class="btn btn-primary ms-1 disabled border border-warning border-3 border-top-0">
+				Unhide Pins
+			</button>
 		</div>
 	</div>
 </div>
 
 <!--  Weekly Forecast Cards-->
-<div id="default-card" class="container weekly-forecast">
+<div id="weekly-forecast" class="container">
 	<div class="card w-100">
 		<div class="card-body d-flex flex-column align-items-center">
 			<div>
 				<h1 class="card-title">⚠NO DATA TO DISPLAY⚠</h1>
 			</div>
 			<div>
-				<p class="card-text fs-3">Start at the top text box and input an address to display corresponding weather data.</p>
+				<p class="card-text fs-3">Start at the top text box and input an address to display corresponding
+					weather data.</p>
 			</div>
 		</div>
 	</div>
 </div>
 
-'<div id="restore-div" class="d-flex justify-content-center">
-</div>'
+<div id="restore-div" class="d-flex justify-content-center">
+</div>
 
 <footer class="mt-5">
 	<div id="footer-title">
@@ -77,12 +95,15 @@
 <!-- Mapbox Geocoder Util Methods -->
 <script src="js/mapbox_geocode_utils.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+		crossorigin="anonymous"></script>
 
 <script src="js/keys.js"></script>
 
 
-<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+		crossorigin="anonymous"></script>
 
 <!-- Custom JS -->
 <script src="js/main.js"></script>

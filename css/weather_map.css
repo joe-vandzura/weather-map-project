@@ -29,21 +29,18 @@ nav, footer {
 
 }
 
-.weekly-forecast {
+#weekly-forecast {
     display: flex;
-}
-
-#default-card {
     color: black;
     background-color: #99faff;
     border: #22b8ff solid 5px;
-    opacity: 75%;
     padding: 0;
 }
 
 .weather-cards {
     margin: 5px;
     color: yellow;
+    border: yellow solid 1px;
     background-color: #22b8ff;
 }
 
