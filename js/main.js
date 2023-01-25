@@ -24,6 +24,10 @@ function decreaseZoom() {
     map.setZoom(currentzoom);
 }
 
+$("#modal-close-btn").click(() => {
+    $("#page-load-modal").modal('hide');
+});
+
 function doSearch(event) {
     event.preventDefault();
     let input = $("#search-input")[0].value;
@@ -32,7 +36,6 @@ function doSearch(event) {
 }
 
 function pinThatAddress(address) {
-    var date1 = new Date(0);
     geocode(address, accessToken)
         .then(function (result) {
             const marker = new mapboxgl.Marker({"color": "blue"});
@@ -62,9 +65,21 @@ function getWeatherData(marker, address, result) {
 }
 
 function createPopUp(marker, address, data) {
-    const popUp = new mapboxgl.Popup();
-    popUp.setHTML('<h3 class="text-capitalize mt-0 text-center">' + address + '</h3>' + '<div class="card"></div>' + '<div class="card-body m-0 p-0">' + '<h5>' + Math.round(data.list[0].main.temp) + '°F</h5>' + '<h6 class="card-subtitle mb-2 text-muted">' + data.list[0].weather[0].description + '</h6>' + '<p class="card-text m-0">H: ' + Math.round(data.list[0].main.temp_max) + '°F</p>' + '<p class="card-text m-0">L:  ' + Math.round(data.list[0].main.temp_min) + '°F</p>' + '</div></div>');
+    const popUp = new mapboxgl.Popup({className: "pops"});
+    popUp.setHTML(
+        '<div class="pop-ups">' +
+        '<h3 class="text-capitalize mt-0 text-center">' + address + '</h3>' +
+        '<div class="card pop-ups">' +
+        '<div class="card-body pop-ups m-0 p-0">' +
+        '<h5>' + Math.round(data.list[0].main.temp) + '°F</h5>' +
+        '<h6 class="card-subtitle pop-ups mb-2 text-muted">' + data.list[0].weather[0].description + '</h6>' +
+        '<p class="card-text m-0">H: ' + Math.round(data.list[0].main.temp_max) + '°F</p>' +
+        '<p class="card-text m-0">L:  ' + Math.round(data.list[0].main.temp_min) + '°F</p>' +
+        '</div>' +
+        '</div>' +
+        '</div>');
     marker.setPopup(popUp);
+    marker.togglePopup();
 }
 
 
@@ -79,19 +94,16 @@ $("#hide-btn").click(function () {
 $("#unhide-btn").click(function () {
     markers.forEach((marker) => {
         marker.addTo(map);
+        marker.togglePopup();
     });
     $("#unhide-btn").toggleClass("disabled");
     $("#hide-btn").toggleClass("disabled");
 });
 
-const defaultThing = $("#weekly-forecast").clone();
+const defaultThing = $("#default-card").clone();
 
 function weeklyForecast(marker, address, data) {
-    console.log("DOING SEARCH HERE!!!");
-    console.log($(".weather-cards"));
-    $("#restore-div").html("");
-    $(".weather-cards").remove();
-    $("#weekly-forecast").html("");
+    resetDataCard();
     let index = 0;
     let html = "";
     for (let i = 0; i < 5; i++) {
@@ -107,13 +119,28 @@ function weeklyForecast(marker, address, data) {
     }
     $("#weekly-forecast").replaceWith(html);
 
+    addClearSearchButton();
+}
+
+function resetDataCard() {
+    $("#restore-div").html("");
+    $(".weather-cards").remove();
+    $("#weekly-forecast").html("");
+}
+
+function addClearSearchButton() {
     $("#restore-div").append('<div id="restore-btn-div" class="d-flex justify-content-center"><button id="restore-default-btn" class="btn btn-primary mt-3 border border-warning border-3">Clear Search</button></div>');
 
     $("#restore-default-btn").click(function () {
-        console.log("PRESSING BUTTON HERE!!!");
-        console.log($(".weather-cards"));
+        map = new mapboxgl.Map({
+            container: 'map', style: 'mapbox://styles/mapbox/outdoors-v12', zoom: 1, center: [-98.4916, 29.4252]
+        });
         $(".weather-cards").remove();
-        $("#weekly-forecast").replaceWith(defaultThing);
+        $("#weekly-forecast").append(defaultThing);
         $("#restore-btn-div").remove();
     });
 }
+
+$(document).ready(function(){
+    $("#page-load-modal").modal('show');
+});

@@ -2,6 +2,18 @@ body {
     background-image: linear-gradient(lightyellow, yellow);
 }
 
+.modal-content {
+    background-color: #22b8ff;
+}
+
+.modal-header {
+    color: yellow;
+}
+
+.modal-footer {
+    border: none;
+}
+
 #map-box {
     background-color: #22b8ff;
     width: 90%;
@@ -21,12 +33,16 @@ nav, footer {
     min-width: 30%;
 }
 
-#search-input {
-
+.pops {
+    background-color: yellow;
 }
 
-#search-btn {
-
+.pop-ups {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: yellow;
+    background-color: #22b8ff;
 }
 
 #weekly-forecast {

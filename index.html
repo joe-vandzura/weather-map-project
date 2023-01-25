@@ -22,6 +22,22 @@
 </head>
 <body>
 
+<div class="modal fade" id="page-load-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Welcome to <strong><i>weather</i>.com</strong></h5>
+			</div>
+			<div class="modal-body">
+				Start by entering an address into the search bar to display the current weather!
+			</div>
+			<div class="modal-footer">
+				<button id="modal-close-btn" type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <nav class="navbar">
 	<div class="container-fluid">
 		<a class="navbar-brand"><strong><i>weather</i></strong>.com</a>
@@ -66,7 +82,7 @@
 
 <!--  Weekly Forecast Cards-->
 <div id="weekly-forecast" class="container">
-	<div class="card w-100">
+	<div id="default-card" class="card w-100">
 		<div class="card-body d-flex flex-column align-items-center">
 			<div>
 				<h1 class="card-title">⚠NO DATA TO DISPLAY⚠</h1>
