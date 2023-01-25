@@ -4,10 +4,19 @@ body {
 
 .modal-content {
     background-color: #22b8ff;
+    border: yellow solid 3px;
 }
 
 .modal-header {
     color: yellow;
+}
+
+.modal-body {
+    font-style: oblique;
+    background-color: #99faff;
+    width: 90%;
+    margin:  20px auto 0px auto;
+    border: yellow solid 1px;
 }
 
 .modal-footer {
@@ -34,7 +43,6 @@ nav, footer {
 }
 
 .pops {
-    background-color: yellow;
 }
 
 .pop-ups {
