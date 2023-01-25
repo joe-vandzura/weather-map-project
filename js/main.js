@@ -106,7 +106,7 @@ function weeklyForecast(marker, address, data) {
     }
     $("#weekly-forecast").replaceWith(html);
 
-    addClearSearchButton();
+    addClearSearchButton(address);
 }
 
 function resetDataCard() {
@@ -115,7 +115,7 @@ function resetDataCard() {
     $("#weekly-forecast").html("");
 }
 
-function addClearSearchButton() {
+function addClearSearchButton(address) {
     $("#restore-div").append(
         '<div id="restore-btn-div" class="d-flex justify-content-between w-50">' +
         '<button id="previous-btn" class="btn btn-primary mt-3 border border-warning border-3">Previous</button>' +
@@ -123,7 +123,16 @@ function addClearSearchButton() {
         '<button id="next-btn" class="btn btn-primary mt-3 border border-warning border-3">Next</button>' +
         '</div>');
 
+    $("#previous-btn").click(previousSearch(address));
+
     $("#restore-default-btn").click(restoreDefault);
+
+    $("#next-btn").click(nextSearch(address));
+}
+
+function previousSearch(address) {
+    let currentIndex = listOfPlaces.indexOf(address);
+    console.log(currentIndex);
 }
 
 function restoreDefault() {
@@ -133,6 +142,10 @@ function restoreDefault() {
     $(".weather-cards").remove();
     $("#weekly-forecast").append(defaultThing);
     $("#restore-btn-div").remove();
+}
+
+function nextSearch(address) {
+    console.log(listOfPlaces);
 }
 
 $(document).ready(function(){
