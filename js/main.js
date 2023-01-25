@@ -123,16 +123,31 @@ function addClearSearchButton(address) {
         '<button id="next-btn" class="btn btn-primary mt-3 border border-warning border-3">Next</button>' +
         '</div>');
 
-    $("#previous-btn").click(previousSearch(address));
+    if (listOfPlaces.length === 1) {
+        $("#previous-btn").addClass("disabled");
+        $("#next-btn").addClass("disabled");
+    }
+
+    $("#previous-btn").click(function() {
+        previousSearch(address);
+    });
 
     $("#restore-default-btn").click(restoreDefault);
 
-    $("#next-btn").click(nextSearch(address));
+    $("#next-btn").click(function() {
+        nextSearch(address);
+    });
+
 }
 
 function previousSearch(address) {
-    let currentIndex = listOfPlaces.indexOf(address);
-    console.log(currentIndex);
+    let prevIndex = listOfPlaces.indexOf(address) + 1;
+    if (prevIndex === listOfPlaces.length) {
+        alert("NNNNNOOOOOOOOOOOOOOOOO!!!!!!!!");
+    } else {
+        address = listOfPlaces[prevIndex];
+        pinThatAddress(address);
+    }
 }
 
 function restoreDefault() {
@@ -142,10 +157,17 @@ function restoreDefault() {
     $(".weather-cards").remove();
     $("#weekly-forecast").append(defaultThing);
     $("#restore-btn-div").remove();
+    listOfPlaces = [];
 }
 
 function nextSearch(address) {
-    console.log(listOfPlaces);
+    let nextIndex = listOfPlaces.indexOf(address) - 1;
+    if (nextIndex < 0) {
+        alert("NNNNNOOOOOOOOOOOOOOOOO!!!!!!!!");
+    } else {
+        address = listOfPlaces[nextIndex];
+        pinThatAddress(address);
+    }
 }
 
 $(document).ready(function(){
