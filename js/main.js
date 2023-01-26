@@ -41,6 +41,7 @@ function doSearch(event) {
 
     if (verifyAddress(input)) {
         searchToast.show();
+        $("#search-input")[0].value = "";
         return;
     }
     listOfPlaces.unshift(input.trim().toLowerCase());
