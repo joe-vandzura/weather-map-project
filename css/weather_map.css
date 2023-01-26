@@ -38,11 +38,17 @@ nav, footer {
     color: yellow;
 }
 
+.navbar-brand:hover {
+    color: yellow;
+}
+
 #search-stuff {
     min-width: 30%;
 }
 
-.pops {
+#current-card {
+    background-color: #99faff;
+    border: #22b8ff solid 3px;
 }
 
 .pop-ups {

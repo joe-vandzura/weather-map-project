@@ -37,7 +37,6 @@ $("#modal-close-btn").click(() => {
 function doSearch(event) {
     event.preventDefault();
     let input = $("#search-input")[0].value;
-    console.log(input);
 
     if (verifyAddress(input)) {
         searchToast.show();
@@ -106,12 +105,21 @@ $("#remove-pins--btn").click(function () {
     });
     resetDataCard();
     $("#weekly-forecast").append(defaultThing);
+    listOfPlaces = [];
 });
 
 function weeklyForecast(marker, address, data) {
     resetDataCard();
     let index = 0;
-    let html = "";
+    let html = '';
+    $("#current-search").append(
+        '<div id="current-card" class="card m-3 w-100">' +
+        '<div class="card-body d-flex">' +
+        '<div>' +
+        '<p class="card-text fs-5">Currently showing results for: "' + address + '"</p>' +
+        '</div>' +
+        '</div>' +
+        '</div>');
     for (let i = 0; i < 5; i++) {
         var date = new Date(data.list[index].dt_txt);
         if (i === 0) {
@@ -132,6 +140,7 @@ function resetDataCard() {
     $("#restore-div").html("");
     $(".weather-cards").remove();
     $("#weekly-forecast").html("");
+    $("#current-card").remove();
 }
 
 function addClearSearchButton(address) {
@@ -176,6 +185,7 @@ function restoreDefault() {
     $(".weather-cards").remove();
     $("#weekly-forecast").append(defaultThing);
     $("#restore-btn-div").remove();
+    $("#current-card").remove();
     listOfPlaces = [];
 }
 
