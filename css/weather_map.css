@@ -87,3 +87,7 @@ footer {
     justify-content: center;
     margin: 50px 0;
 }
+
+.toast-container {
+    z-index: 1000;
+}

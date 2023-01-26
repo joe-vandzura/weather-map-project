@@ -26,7 +26,7 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Welcome to <strong><i>weather</i>.com</strong></h5>
+				<h5 class="modal-title" id="exampleModalLongTitle">Welcome to <strong><i>Weather Stuff</i></strong></h5>
 			</div>
 			<div class="modal-body">
 				Start by entering an address into the search bar to display the current weather!
@@ -40,12 +40,18 @@
 
 <nav class="navbar">
 	<div class="container-fluid">
-		<a class="navbar-brand"><strong><i>weather</i></strong>.com</a>
-		<form id="search-stuff" class="d-flex">
-			<input id="search-input" type="text" class="form-control me-2 d-none d-md-block"
-				   placeholder="Enter an Address">
-			<button class="btn btn-warning d-none d-md-block" onclick="doSearch(event)" id="search-btn">Search</button>
+		<a class="navbar-brand"><strong><i>Weather Stuff</i></strong></a>
+
+		<form id="search-stuff" class="d-flex needs-validation" novalidate>
+			<input type="text" class="form-control" id="search-input" placeholder="Enter an Address" autocomplete="off" required>
+			<button class="btn btn-warning d-none d-md-block" type="submit" onclick="doSearch(event)" id="search-btn">Search</button>
+			<div class="invalid-feedback">
+				Please provide a valid address.
+			</div>
+			<div class="valid-feedback">
+			</div>
 		</form>
+
 	</div>
 </nav>
 
@@ -97,9 +103,42 @@
 
 <footer class="mt-5">
 	<div id="footer-title">
-		<a><strong><i>weather</i></strong>.com</a>
+		<a><strong><i>Weather Stuff</i></strong></a>
 	</div>
 </footer>
+
+<div class="toast-container position-absolute pt-5 pe-5 mt-1 me-5 top-0 end-0">
+	<div id="search-toast" class="toast align-items-center text-white bg-danger border-0" role="alert">
+		<div class="d-flex">
+			<div class="toast-body">
+				You have already entered this address.
+			</div>
+			<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+		</div>
+	</div>
+</div>
+
+<div class="toast-container position-fixed p-3 top-0 end-0">
+	<div id="next-toast" class="toast align-items-center text-white bg-danger border-0" role="alert">
+		<div class="d-flex">
+			<div class="toast-body">
+				There is no next search.
+			</div>
+			<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+		</div>
+	</div>
+</div>
+
+<div class="toast-container position-fixed p-3 top-0 end-0">
+	<div id="previous-toast" class="toast align-items-center text-white bg-danger border-0" role="alert">
+		<div class="d-flex">
+			<div class="toast-body">
+				There is no previous search.
+			</div>
+			<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+		</div>
+	</div>
+</div>
 
 
 <!-- Mapbox JS -->

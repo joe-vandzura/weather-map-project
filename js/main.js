@@ -9,6 +9,9 @@ var map = new mapboxgl.Map({
 let markers = [];
 let listOfPlaces = [];
 const defaultThing = $("#default-card").clone();
+let searchToast = new bootstrap.Toast($("#search-toast")[0]);
+let nextToast = new bootstrap.Toast($("#next-toast")[0]);
+let prevToast = new bootstrap.Toast($("#previous-toast")[0]);
 
 
 function increaseZoom() {
@@ -34,12 +37,25 @@ $("#modal-close-btn").click(() => {
 function doSearch(event) {
     event.preventDefault();
     let input = $("#search-input")[0].value;
-    listOfPlaces.unshift(input);
+    console.log(input);
+
+    if (verifyAddress(input)) {
+        searchToast.show();
+        return;
+    }
+    listOfPlaces.unshift(input.trim().toLowerCase());
     pinThatAddress(input);
     $("#search-input")[0].value = "";
 }
 
+function verifyAddress(input) {
+    console.log(listOfPlaces);
+    return listOfPlaces.includes(input.toLowerCase());
+}
+
 function pinThatAddress(address) {
+    removePreviousMakers();
+
     geocode(address, accessToken)
         .then(function (result) {
             const marker = new mapboxgl.Marker({"color": "blue"});
@@ -56,6 +72,12 @@ function pinThatAddress(address) {
     }));
 }
 
+function removePreviousMakers() {
+    markers.forEach(marker => {
+        marker.remove();
+    });
+}
+
 function getWeatherData(marker, address, result) {
     $.get("http://api.openweathermap.org/data/2.5/forecast", {
         APPID: NEW_OPENWEATHER_API_KEY,
@@ -70,12 +92,8 @@ function getWeatherData(marker, address, result) {
 function createPopUp(marker, address, data) {
     const popUp = new mapboxgl.Popup({className: "pops"});
     popUp.setHTML(
-        '<h1 class="text-capitalize text-center">' + address + '</h1>' +
-        '<div class="card w-100">' +
-        '<div class="d-flex flex-column justify-content-center card-body">' +
-        '<p class="card-text fs-2 text-center">' + Math.round(data.list[0].main.temp) + '°F</p>' +
-        '</div>' +
-        '</div>');
+        '<p class="card-text fs-2 text-center p-3">You are here.</p>'
+    );
     marker.setPopup(popUp);
     marker.togglePopup();
 }
@@ -143,7 +161,7 @@ function addClearSearchButton(address) {
 function previousSearch(address) {
     let prevIndex = listOfPlaces.indexOf(address) + 1;
     if (prevIndex === listOfPlaces.length) {
-        alert("NNNNNOOOOOOOOOOOOOOOOO!!!!!!!!");
+        prevToast.show();
     } else {
         address = listOfPlaces[prevIndex];
         pinThatAddress(address);
@@ -163,7 +181,7 @@ function restoreDefault() {
 function nextSearch(address) {
     let nextIndex = listOfPlaces.indexOf(address) - 1;
     if (nextIndex < 0) {
-        alert("NNNNNOOOOOOOOOOOOOOOOO!!!!!!!!");
+        nextToast.show();
     } else {
         address = listOfPlaces[nextIndex];
         pinThatAddress(address);
